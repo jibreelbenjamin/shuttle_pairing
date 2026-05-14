@@ -103,13 +103,34 @@ class TournamentController extends Controller
         // Hapus match sebelumnya
         $tournament->matches()->delete();
 
-        // Acak peserta
-        $participants = $participants->shuffle();
+        // Nama peserta yang HARUS dijadikan pasangan lawan
+        $forcedPairNames = ['TURAIB & EDY', 'AZAM & NANANG'];
 
-        // Buat pasangan
+        // Cari peserta dengan nama-nama tersebut
+        $forcedParticipantIds = collect();
+        $forcedPair = null;
+
+        $p1 = $participants->firstWhere('nama', $forcedPairNames[0]);
+        $p2 = $participants->firstWhere('nama', $forcedPairNames[1]);
+
+        if ($p1 && $p2) {
+            // Kedua peserta ditemukan → simpan sebagai forced pair
+            $forcedPair = [$p1, $p2];
+            $forcedParticipantIds->push($p1->id, $p2->id);
+        }
+
+        // Sisa peserta yang tidak termasuk forced pairing
+        $remaining = $participants->reject(function ($p) use ($forcedParticipantIds) {
+            return $forcedParticipantIds->contains($p->id);
+        });
+
+        // Acak sisa peserta
+        $remaining = $remaining->shuffle();
+
+        // Buat pasangan dari sisa peserta
         $pasangan = [];
         $temp = [];
-        foreach ($participants as $p) {
+        foreach ($remaining as $p) {
             $temp[] = $p;
             if (count($temp) == 2) {
                 $pasangan[] = $temp;
@@ -119,6 +140,12 @@ class TournamentController extends Controller
 
         // Jika ada sisa 1 peserta → BY
         $byParticipant = count($temp) === 1 ? $temp[0] : null;
+
+        // Sisipkan forced pair di posisi acak dalam array pasangan
+        if ($forcedPair) {
+            $randomIndex = rand(0, count($pasangan));
+            array_splice($pasangan, $randomIndex, 0, [$forcedPair]);
+        }
 
         // Buat match babak 1 (pasangan biasa)
         $urutan = 1;
