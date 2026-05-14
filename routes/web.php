@@ -1,31 +1,40 @@
 <?php
 
+use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\TournamentController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return redirect()->route('tournament.index');
-});
+// Route password (tanpa middleware)
+Route::get('/password', [PasswordController::class, 'showForm'])->name('password.form');
+Route::post('/password', [PasswordController::class, 'verify'])->name('password.verify');
+Route::post('/password/logout', [PasswordController::class, 'logout'])->name('password.logout');
 
-Route::prefix('tournament')->name('tournament.')->group(function () {
-    Route::get('/', [TournamentController::class, 'index'])->name('index');
-    Route::get('/create', [TournamentController::class, 'create'])->name('create');
-    Route::post('/', [TournamentController::class, 'store'])->name('store');
-    Route::get('/{tournament}', [TournamentController::class, 'show'])->name('show');
-    Route::delete('/{tournament}', [TournamentController::class, 'destroy'])->name('destroy');
+// Semua route di bawah ini dilindungi password
+Route::middleware('app.password')->group(function () {
+    Route::get('/', function () {
+        return redirect()->route('tournament.index');
+    });
 
-    // Import peserta
-    Route::get('/{tournament}/import', [TournamentController::class, 'importForm'])->name('import.form');
-    Route::post('/{tournament}/import', [TournamentController::class, 'importPeserta'])->name('import.peserta');
+    Route::prefix('tournament')->name('tournament.')->group(function () {
+        Route::get('/', [TournamentController::class, 'index'])->name('index');
+        Route::get('/create', [TournamentController::class, 'create'])->name('create');
+        Route::post('/', [TournamentController::class, 'store'])->name('store');
+        Route::get('/{tournament}', [TournamentController::class, 'show'])->name('show');
+        Route::delete('/{tournament}', [TournamentController::class, 'destroy'])->name('destroy');
 
-    // Template download
-    Route::get('/template/download', [TournamentController::class, 'downloadTemplate'])->name('template.download');
+        // Import peserta
+        Route::get('/{tournament}/import', [TournamentController::class, 'importForm'])->name('import.form');
+        Route::post('/{tournament}/import', [TournamentController::class, 'importPeserta'])->name('import.peserta');
 
-    // Peserta
-    Route::delete('/{tournament}/participants/{participant}', [TournamentController::class, 'deleteParticipant'])->name('participant.delete');
-    Route::delete('/{tournament}/participants', [TournamentController::class, 'deleteAllParticipants'])->name('participant.deleteAll');
+        // Template download
+        Route::get('/template/download', [TournamentController::class, 'downloadTemplate'])->name('template.download');
 
-    // Bracket
-    Route::post('/{tournament}/generate-bracket', [TournamentController::class, 'generateBracket'])->name('generate.bracket');
-    Route::post('/{tournament}/reset-bracket', [TournamentController::class, 'resetBracket'])->name('reset.bracket');
+        // Peserta
+        Route::delete('/{tournament}/participants/{participant}', [TournamentController::class, 'deleteParticipant'])->name('participant.delete');
+        Route::delete('/{tournament}/participants', [TournamentController::class, 'deleteAllParticipants'])->name('participant.deleteAll');
+
+        // Bracket
+        Route::post('/{tournament}/generate-bracket', [TournamentController::class, 'generateBracket'])->name('generate.bracket');
+        Route::post('/{tournament}/reset-bracket', [TournamentController::class, 'resetBracket'])->name('reset.bracket');
+    });
 });

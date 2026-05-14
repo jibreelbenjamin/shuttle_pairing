@@ -27,6 +27,14 @@
                     <a href="{{ route('tournament.create') }}" class="bg-indigo-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-indigo-700 transition-colors">
                         + Buat Turnamen
                     </a>
+                    <form action="{{ route('password.logout') }}" method="POST" class="inline" onsubmit="return confirm('Yakin ingin keluar?')">
+                        @csrf
+                        <button type="submit" class="text-gray-400 hover:text-red-500px-2 py-2 rounded-md text-sm font-medium transition-colors" title="Keluar">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                            </svg>
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
