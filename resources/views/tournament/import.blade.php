@@ -49,22 +49,10 @@
                 @csrf
 
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Pilih File Excel</label>
-                    <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg hover:border-indigo-400 transition-colors">
-                        <div class="space-y-1 text-center">
-                            <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                            </svg>
-                            <div class="flex text-sm text-gray-600">
-                                <label for="file_peserta" class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none">
-                                    <span>Upload file</span>
-                                    <input id="file_peserta" name="file_peserta" type="file" class="sr-only" accept=".xlsx,.xls,.csv" required>
-                                </label>
-                                <p class="pl-1">atau drag and drop</p>
-                            </div>
-                            <p class="text-xs text-gray-500">XLSX, XLS, atau CSV</p>
-                        </div>
-                    </div>
+                    <label for="file_peserta" class="block text-sm font-medium text-gray-700 mb-2">Pilih File Excel</label>
+                    <input id="file_peserta" name="file_peserta" type="file" accept=".xlsx,.xls,.csv" required
+                           class="block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 transition-colors cursor-pointer border border-gray-300 rounded-lg p-1.5">
+                    <p class="mt-1 text-xs text-gray-500">Format: XLSX, XLS, atau CSV</p>
                     @error('file_peserta')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror

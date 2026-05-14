@@ -48,12 +48,7 @@
                                     </p>
                                 @endif
                             </div>
-                            <span class="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
-                                @if($tournament->status == 'pendaftaran') bg-yellow-100 text-yellow-800
-                                @elseif($tournament->status == 'berlangsung') bg-blue-100 text-blue-800
-                                @else bg-green-100 text-green-800 @endif">
-                                {{ ucfirst($tournament->status) }}
-                            </span>
+                            
                         </div>
 
                         <div class="mt-4 flex items-center space-x-4 text-sm text-gray-500">

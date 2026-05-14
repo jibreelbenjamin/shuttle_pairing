@@ -21,10 +21,11 @@ Route::prefix('tournament')->name('tournament.')->group(function () {
     // Template download
     Route::get('/template/download', [TournamentController::class, 'downloadTemplate'])->name('template.download');
 
+    // Peserta
+    Route::delete('/{tournament}/participants/{participant}', [TournamentController::class, 'deleteParticipant'])->name('participant.delete');
+    Route::delete('/{tournament}/participants', [TournamentController::class, 'deleteAllParticipants'])->name('participant.deleteAll');
+
     // Bracket
     Route::post('/{tournament}/generate-bracket', [TournamentController::class, 'generateBracket'])->name('generate.bracket');
     Route::post('/{tournament}/reset-bracket', [TournamentController::class, 'resetBracket'])->name('reset.bracket');
-
-    // Set pemenang
-    Route::post('/match/{match}/set-pemenang', [TournamentController::class, 'setPemenang'])->name('set.pemenang');
 });
